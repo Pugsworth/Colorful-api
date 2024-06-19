@@ -1,4 +1,4 @@
-package colorful
+package main
 
 import "testing"
 
