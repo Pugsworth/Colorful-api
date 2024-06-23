@@ -1,0 +1,71 @@
+<DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+
+    <body>
+        <h2>Color Palettes</h2>
+
+        <div>
+            <textarea name="text_input" id="text_input" rows="10" cols="60"></textarea>
+            <input type="button" id="submit_btn" value="Test">
+        </div>
+
+        <div>
+            <label id="label">label</label>
+            <img src="" id="image" alt="">
+        </div>
+
+        <script type="text/javascript">
+            const $ = function() { return document.querySelector(...arguments); }
+
+            function submit(event) {
+                event.preventDefault();
+                // window.alert(event);
+                let text = $("#text_input").value;
+                let color_list = parseColors(text);
+                console.log(text);
+                console.log(color_list);
+
+                let colors = encodeURIComponent(color_list.join(","));
+                $("#label").textContent = colors;
+                $("#image").src = "http://localhost:8080/palette?colors=" + colors + "&bs=32&layout=Grid";
+            }
+
+            $("#submit_btn").addEventListener("click", function(event) {
+                submit(event);
+            });
+
+            $("#text_input").addEventListener("keydown", function(event) {
+                if (event.ctrlKey && event.keyCode == 13) {
+                    event.preventDefault();
+                    submit(event);
+                }
+            });
+
+            function parseColors(text) {
+                console.log(text.split(/[\s\r\n,]+/));
+                return text.split(/[\s\r\n,]+/).map((str) => {
+                    if (str.length < 3 || str.length > 7) {
+                        return;
+                    }
+                    console.log("length");
+
+                    if (/[g-zG-Z]/.test(str)) {
+                        return;
+                    }
+                    console.log("Invalid characters");
+
+                    if (!str.startsWith("#")) {
+                        str = "#" + str;
+                    }
+                    console.log("Starts with #");
+
+                    return str;
+                }).filter((str) => str !== undefined);
+            }
+
+        </script>
+    </body>
+</html>
